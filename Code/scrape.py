@@ -4,6 +4,7 @@ import requests
 import bs4
 import pandas as pd
 import numpy as np
+import re
 
 URL = 'https://president.umd.edu/taxonomy/term/campus-messages'
 
@@ -19,7 +20,15 @@ dates = soup.find_all('div', class_="feed-item-date")
 
 descs = soup.find_all('div', class_="feed-item-description")
 
-
+#print(divs)
+url_list = []
+for h in divs:
+    a = h.find('a')
+    if 'href' in a.attrs:
+        url = a.get('href')
+        url_list.append("https://president.umd.edu" + url)
+    else:
+        pass
 #for elements in div:
     #title = soup.find('div', class_="feed-item-title")
 
@@ -29,24 +38,35 @@ descs = soup.find_all('div', class_="feed-item-description")
 
 title_list = []
 for title in titles:
-    title_list.append(title.text)
+    title = title.text
+    title = re.sub("\n","",str(title))
+    title_list.append(title)
+
+#for item in title_list:
+    #item = re.sub("\n","",str(item))
+
+
 
 date_list = []
 for date in dates:
-    date_list.append(date.text)
-#print(date_list)
+    date = date.text
+    date = re.sub("\n","",str(date))
+    date_list.append(date)
+
 
 desc_list = []
 for desc in descs:
-    desc_list.append(desc.text)
+    desc = desc.text
+    desc = re.sub("\n","",str(desc))
+    desc_list.append(desc)
 #print(desc_list)
 #print(title_list)
 
 #df = pd.DataFrame (title_list, columns = ['subjects'])
 #print (df)
 
-df = pd.DataFrame(zip(date_list, title_list, desc_list))
-columns=['date','subject', 'desc']
+df = pd.DataFrame(zip(date_list, title_list, desc_list, url_list))
+columns=['date','subject', 'desc', 'url']
 print(df)
 
 df.to_csv('data.csv')
