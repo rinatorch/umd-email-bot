@@ -29,7 +29,6 @@ descs = soup.find_all('div', class_="feed-item-description")
 
 title_list = []
 for title in titles:
-    title.strip('\n')
     title_list.append(title.text)
 
 date_list = []
@@ -50,7 +49,7 @@ df = pd.DataFrame(zip(date_list, title_list, desc_list))
 columns=['date','subject', 'desc']
 print(df)
 
-df.to_csv('test.csv')
+df.to_csv('data.csv')
 
 """
 for date in dates:
