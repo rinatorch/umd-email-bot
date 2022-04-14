@@ -18,4 +18,4 @@ jobs:
         cache: 'pipenv'
     - run: pipenv install --python `which python`
     - name: Run scraper
-      run: python scrape.py
+      run: Code/scrape.py
