@@ -17,6 +17,6 @@ jobs:
         python-version: '3.9'
         cache: 'pipenv'
     - run: pipenv install --python `which python`
-    - run: cd Code && pipenv install requests
+    - run: cd Code && pipenv install --requests
     - name: Run scraper
       run: cd Code && python scrape.py
