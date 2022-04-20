@@ -28,6 +28,9 @@ for h in divs:
         url_list.append("https://president.umd.edu" + url)
     else:
         pass
+
+
+
 #for elements in div:
     #title = soup.find('div', class_="feed-item-title")
 
