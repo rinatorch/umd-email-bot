@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: '3.9'
         cache: 'pipenv'
-    - run: pipenv shell
+    - run: cd Code && pipenv shell
     - run: pipenv install --python `which python`
     - run: pipenv install requests
     - run: pipenv install bs4
