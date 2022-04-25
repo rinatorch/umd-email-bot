@@ -25,3 +25,12 @@ jobs:
     - run: cd Code && pip install numpy
     - name: Run scraper
       run: cd Code && python scrape.py
+
+  - name: Commit and push csv
+        run: |-
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add data.csv
+          timestamp=$(date -u)
+          git commit -m "latest csv update: ${timestamp}" || exit 0
+          git push
