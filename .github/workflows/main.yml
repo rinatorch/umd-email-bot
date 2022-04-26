@@ -26,10 +26,9 @@ jobs:
     - name: Run scraper
       run: cd Code && python scrape.py
     - name: Add and commit
-      run: |-
-        git add .
-        git config user.name "Automated"
-        git config user.email "actions@users.noreply.github.com"	
-        git commit -m "Latest data"
-    - name: Push
-      run: git push
+      id: add_commit
+      uses: EndBug/add-and-commit@v8
+      with:
+        committer_name: Automated
+        committer_email: actions@users.noreply.github.com
+        message: "Latest data"
