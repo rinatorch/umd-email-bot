@@ -22,7 +22,6 @@ jobs:
     - run: cd Code && pip install requests
     - run: cd Code && pip install bs4
     - run: cd Code && pip install pandas
-    - run: cd Code && pip install numpy
     - name: Run scraper
       run: cd Code && python scrape.py
     - name: Slack Notification
