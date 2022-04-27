@@ -24,12 +24,6 @@ jobs:
     - run: cd Code && pip install pandas
     - name: Run scraper
       run: cd Code && python scrape.py
-    - name: Slack Notification
-      uses: tokorom/action-slack-incoming-webhook@main
-      env:
-        INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      with:
-        text: hello, slack!
     - name: Add and commit
       id: add_commit
       uses: EndBug/add-and-commit@v8
@@ -37,3 +31,4 @@ jobs:
         committer_name: Automated
         committer_email: actions@users.noreply.github.com
         message: "Latest data"
+    - run: cd Code && pip install numpy
