@@ -1,9 +1,9 @@
 name: Scrape
 
 on:
-  workflow-dispatch:
   schedule:
     - cron: "*/5 * * * *"
+  workflow_dispatch:
 
 
 jobs:
