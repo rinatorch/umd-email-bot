@@ -32,3 +32,9 @@ jobs:
         committer_name: Automated
         committer_email: actions@users.noreply.github.com
         message: "Latest data"
+  - name: Slack Notification
+    uses: tokorom/action-slack-incoming-webhook@main
+  env:
+    INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  with:
+    text: Hello, Slack!
