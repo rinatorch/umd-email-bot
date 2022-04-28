@@ -22,7 +22,10 @@ jobs:
     - run: cd Code && pip install requests
     - run: cd Code && pip install bs4
     - run: cd Code && pip install pandas
+    - run: cd Code && pip install slackclient
     - name: Run scraper
+      env: # Or as an environment variable
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
       run: cd Code && python scrape.py
     - name: Add and commit
       id: add_commit

@@ -4,28 +4,38 @@ import bs4
 import pandas as pd
 import numpy as np
 import re
+import os
+from slack import WebClient
+from slack.errors import SlackApiError
+import csv
 
 URL = 'https://president.umd.edu/taxonomy/term/campus-messages'
 
 message_page = requests.get(URL)
 soup = bs4.BeautifulSoup(message_page.text, 'html.parser')
 
-divs = []
-divs = soup.find_all('div', class_="feed-item")
 
-titles = soup.find_all('h2', class_="feed-item-title")
-
-dates = soup.find_all('div', class_="feed-item-date")
-
-descs = soup.find_all('div', class_="feed-item-description")
-
+#divs = []
+divs = soup.find_all('umd-feed-item')
 #print(divs)
+
+titles = soup.find_all('h2', class_="normal-san-serif")
+#print(titles)
+
+dates = soup.find_all('div', class_="extra-small-san-serif")
+#print(dates)
+
+descs = soup.find_all('div', class_="rich-text")
+#descs = soup.find_all('div', data-feed-item_="description")
+#print(descs)
+
+
 url_list = []
 for h in divs:
     a = h.find('a')
     if 'href' in a.attrs:
         url = a.get('href')
-        url_list.append("https://president.umd.edu" + url)
+        url_list.append(url)
     else:
         pass
 
@@ -35,8 +45,7 @@ for h in divs:
     #title = soup.find('div', class_="feed-item-title")
 
 #for div in divs:
-    #print(div.text)
-#print(titles)
+    #print(div.text
 
 title_list = []
 for title in titles:
@@ -60,24 +69,46 @@ desc_list = []
 for desc in descs:
     desc = desc.text
     desc = re.sub("\n","",str(desc))
+    desc = re.sub("                  ","",str(desc))
     desc_list.append(desc)
-#print(desc_list)
-#print(title_list)
 
-#df = pd.DataFrame (title_list, columns = ['subjects'])
-#print (df)
 
-df = pd.DataFrame(zip(date_list, title_list, desc_list, url_list))
-columns=['date','subject', 'desc', 'url']
-print(df)
 
+df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list)))
+
+#print(df)
+def get_urls():
+    infile = open("data.csv", newline='')
+    reader = csv.DictReader(infile)
+    csv_urls = []
+    for item in reader:
+        csv_urls.append(item['3'])
+    return csv_urls
+
+
+#take links
+#add to list
+
+
+#print(url_list)
+
+def sendSlackMsg():
+    csv_urls = get_urls()
+    for_message = [item for item in url_list if item not in csv_urls]
+    for item in for_message:
+        slack_token = os.environ["SLACK_API_TOKEN"]
+        client = WebClient(token=slack_token)
+
+        try:
+          response = client.chat_postMessage(
+            channel="slack-bots",
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email :rotating_light:\n<{url}|Read it here.>"}}]
+          )
+        except SlackApiError as e:
+          # You will get a SlackApiError if "ok" is False
+          assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+
+
+
+sendSlackMsg()
 df.to_csv('data.csv')
-
-"""
-for date in dates:
-    print(date.text)
-
-for desc in descs:
-    print(desc.text)
-
-"""
