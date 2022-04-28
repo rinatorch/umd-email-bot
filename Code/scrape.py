@@ -93,16 +93,27 @@ def get_urls():
 #print(url_list)
 
 def sendSlackMsg():
+#get unique/new url
     csv_urls = get_urls()
     for_message = [item for item in url_list if item not in csv_urls]
+    df.to_csv('data.csv')
     for item in for_message:
+    #turn that into a dict
+        infile = open("data.csv", newline='')
+        reader = csv.DictReader(infile)
+        csv_titles = []
+    #plant
+        for item in reader:
+            csv_titles.append(item['1'])
+    #prep slack token
+
         slack_token = os.environ["SLACK_API_TOKEN"]
         client = WebClient(token=slack_token)
 
         try:
           response = client.chat_postMessage(
             channel="slack-bots",
-            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email :rotating_light:\n<{url}|Read it here.>"}}]
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email :rotating_light:\n*{csv_titles[0]}*\n<{for_message[0]}|Read it here.>"}}]
           )
         except SlackApiError as e:
           # You will get a SlackApiError if "ok" is False
@@ -111,4 +122,4 @@ def sendSlackMsg():
 
 
 sendSlackMsg()
-df.to_csv('data.csv')
+#df.to_csv('data.csv')
