@@ -9,6 +9,8 @@ bs4 = "*"
 pandas = "*"
 numpy = "*"
 slackclient = "*"
+nltk = "*"
+spacy = "*"
 
 [dev-packages]
 

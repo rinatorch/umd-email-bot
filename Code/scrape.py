@@ -8,6 +8,13 @@ import os
 from slack import WebClient
 from slack.errors import SlackApiError
 import csv
+#import nltk
+#import spacy
+#from nltk import ne_chunk, pos_tag, word_tokenize
+#from nltk.tree import Tree
+#nlp = spacy.load("en_core_web_sm")
+
+
 
 URL = 'https://president.umd.edu/taxonomy/term/campus-messages'
 
@@ -39,13 +46,19 @@ for h in divs:
     else:
         pass
 
+text_list = []
+for url in url_list:
+    single_msg_page = requests.get(url)
+    soup = bs4.BeautifulSoup(single_msg_page.text, 'html.parser')
+    body_text = soup.find_all('section', id='section-body-text')
+    for bodies in body_text:
+        bodies = bodies.text
+        text_list.append(bodies)
+        #print(bodies)
+    #print(body_text)
+    #for body_text
+#print(text_list)
 
-
-#for elements in div:
-    #title = soup.find('div', class_="feed-item-title")
-
-#for div in divs:
-    #print(div.text
 
 title_list = []
 for title in titles:
@@ -62,6 +75,7 @@ date_list = []
 for date in dates:
     date = date.text
     date = re.sub("\n","",str(date))
+    date = re.sub("    ","",str(date))
     date_list.append(date)
 
 
@@ -74,9 +88,10 @@ for desc in descs:
 
 
 
-df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list)))
+df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list, text_list)))
 
 #print(df)
+
 def get_urls():
     infile = open("data.csv", newline='')
     reader = csv.DictReader(infile)
@@ -102,9 +117,12 @@ def sendSlackMsg():
         infile = open("data.csv", newline='')
         reader = csv.DictReader(infile)
         csv_titles = []
+        csv_dates = []
     #plant
         for item in reader:
             csv_titles.append(item['1'])
+            csv_dates.append(item['0'])
+
     #prep slack token
 
         slack_token = os.environ["SLACK_API_TOKEN"]
@@ -113,7 +131,7 @@ def sendSlackMsg():
         try:
           response = client.chat_postMessage(
             channel="slack-bots",
-            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email :rotating_light:\n*{csv_titles[0]}*\n<{for_message[0]}|Read it here.>"}}]
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\n<{for_message[0]}|Read it here.>"}}]
           )
         except SlackApiError as e:
           # You will get a SlackApiError if "ok" is False
@@ -122,4 +140,5 @@ def sendSlackMsg():
 
 
 sendSlackMsg()
+
 #df.to_csv('data.csv')
