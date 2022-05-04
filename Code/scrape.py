@@ -53,6 +53,7 @@ for url in url_list:
     body_text = soup.find_all('section', id='section-body-text')
     for bodies in body_text:
         bodies = bodies.text
+        bodies = re.sub("\n","",str(bodies))
         text_list.append(bodies)
         #print(bodies)
     #print(body_text)
@@ -93,10 +94,11 @@ df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list, text_list
 #print(df)
 
 def get_urls():
-    infile = open("data.csv", newline='')
+    infile = open("data.csv", encoding='utf8', newline='')
     reader = csv.DictReader(infile)
     csv_urls = []
     for item in reader:
+        #print(item)
         csv_urls.append(item['3'])
     return csv_urls
 
@@ -108,7 +110,8 @@ def get_urls():
 #print(url_list)
 
 def sendSlackMsg():
-#get unique/new url
+#get unique/new urlpyth
+
     csv_urls = get_urls()
     for_message = [item for item in url_list if item not in csv_urls]
     df.to_csv('data.csv')

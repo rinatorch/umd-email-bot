@@ -11,6 +11,7 @@ numpy = "*"
 slackclient = "*"
 nltk = "*"
 spacy = "*"
+csvkit = "*"
 
 [dev-packages]
 
