@@ -1,4 +1,4 @@
-##next step, remove newlines
+# -*- coding: utf-8 -*-
 import requests
 import bs4
 import pandas as pd
@@ -45,7 +45,7 @@ for h in divs:
         url_list.append(url)
     else:
         pass
-
+"""
 text_list = []
 for url in url_list:
     single_msg_page = requests.get(url)
@@ -59,7 +59,7 @@ for url in url_list:
     #print(body_text)
     #for body_text
 #print(text_list)
-
+"""
 
 title_list = []
 for title in titles:
@@ -89,7 +89,7 @@ for desc in descs:
 
 
 
-df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list, text_list)))
+df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list)))
 
 #print(df)
 
@@ -121,25 +121,37 @@ def sendSlackMsg():
         reader = csv.DictReader(infile)
         csv_titles = []
         csv_dates = []
+        csv_desc = []
     #plant
         for item in reader:
             csv_titles.append(item['1'])
             csv_dates.append(item['0'])
+            csv_desc.append(item['2'])
 
     #prep slack token
 
         slack_token = os.environ["SLACK_API_TOKEN"]
         client = WebClient(token=slack_token)
-
+        ts_id = ""
         try:
           response = client.chat_postMessage(
             channel="slack-bots",
-            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\n<{for_message[0]}|Read it here.>"}}]
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New UMD email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\nRead the teaser in :thread: or see <{for_message[0]}|the full email here>"}}]
           )
+          ts_id = ts_id+response['ts']
         except SlackApiError as e:
           # You will get a SlackApiError if "ok" is False
           assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-
+    for item in for_message:
+        try:
+            response = client.chat_postMessage(
+            channel="slack-bots",
+            thread_ts=ts_id,
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f"*Start reading*\n{desc_list[0]}"}}]
+              )
+        except SlackApiError as e:
+          # You will get a SlackApiError if "ok" is False
+          assert e.response["error"]
 
 
 sendSlackMsg()
