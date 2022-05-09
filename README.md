@@ -12,4 +12,7 @@ Another major hiccup in the same vein was ensuring that I loaded in all of my li
 
 I also initially struggled to connect to Slack. In an old repository for my first Slack bot, I was able to get the same bot to run, but I struggled to get the email bot to run in Slack. Once I indicated the channel in the yml and pulled the correct token from Slack, I was able to begin sending messages in Slack from my new email bot repository.
 
+I used BeautifulSoup to scrape the data, which came to me pretty easily. However, one day, when I sat down to make progress on the app, I found that all of the lists I had created were empty. I could not figure out why, at first, but when I double-checked what I had against the web page’s source code, I found that the HTML backing the message page on the university website had changed. It took some time, but I was able to adjust all of the code to the newly named sections, among other HTML elements.
+
+
 … to be continued
