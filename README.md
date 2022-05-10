@@ -15,7 +15,7 @@ The link to the full email appears multiple times to accommodate different types
 
 From a visual perspective, the bot includes an envelope icon and The Diamondback logo sitting inside of the envelope. The app icon – covered in “Diamondback red”, black and white – mimics the appearance of another Slack bot, aptly named “Diamondbot,” who lives in The Diamondback Slack. The two are intentionally similar, but not too similar so that the user can distinguish messages from Diamondbot and this UMD email bot.
 
-## The journey (and all of the road blocks)
+## The journey (and all of the roadblocks)
 
 Over the course of creating this project, I ran into an expanse of problems. First, I had trouble figuring out the relationship between the yml file and Python. At a point, I remember seeing more than 90 GitHub Actions failed messages fill my inbox. I tried to do too much with the yml file, but I later moved the actions I tried to do in the yml file into Python. Specifically, in Python, I added code that would only send Slack messages if there was new data, rather than turning to the yml file to try to do this.
 
