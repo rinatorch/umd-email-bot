@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+#load packages
 import requests
 import bs4
 import pandas as pd
@@ -8,34 +10,24 @@ import os
 from slack import WebClient
 from slack.errors import SlackApiError
 import csv
-#import nltk
-#import spacy
-#from nltk import ne_chunk, pos_tag, word_tokenize
-#from nltk.tree import Tree
-#nlp = spacy.load("en_core_web_sm")
+from csv import DictWriter
 
 
-
+#define URL
 URL = 'https://president.umd.edu/taxonomy/term/campus-messages'
 
+#begin to extract and scrape
 message_page = requests.get(URL)
 soup = bs4.BeautifulSoup(message_page.text, 'html.parser')
 
 
-#divs = []
 divs = soup.find_all('umd-feed-item')
-#print(divs)
 
 titles = soup.find_all('h2', class_="normal-san-serif")
-#print(titles)
 
 dates = soup.find_all('div', class_="extra-small-san-serif")
-#print(dates)
 
 descs = soup.find_all('div', class_="rich-text")
-#descs = soup.find_all('div', data-feed-item_="description")
-#print(descs)
-
 
 url_list = []
 for h in divs:
@@ -45,32 +37,12 @@ for h in divs:
         url_list.append(url)
     else:
         pass
-"""
-text_list = []
-for url in url_list:
-    single_msg_page = requests.get(url)
-    soup = bs4.BeautifulSoup(single_msg_page.text, 'html.parser')
-    body_text = soup.find_all('section', id='section-body-text')
-    for bodies in body_text:
-        bodies = bodies.text
-        bodies = re.sub("\n","",str(bodies))
-        text_list.append(bodies)
-        #print(bodies)
-    #print(body_text)
-    #for body_text
-#print(text_list)
-"""
 
 title_list = []
 for title in titles:
     title = title.text
     title = re.sub("\n","",str(title))
     title_list.append(title)
-
-#for item in title_list:
-    #item = re.sub("\n","",str(item))
-
-
 
 date_list = []
 for date in dates:
@@ -87,30 +59,23 @@ for desc in descs:
     desc = re.sub("                  ","",str(desc))
     desc_list.append(desc)
 
-
-
+#convert lists to data frame
 df = pd.DataFrame(list(zip(date_list, title_list, desc_list, url_list)))
 
-#print(df)
+#add column titles
+df.columns = ["Date","Title","Teaser","URL"]
 
+#add csv_urls to dict
 def get_urls():
     infile = open("data.csv", encoding='utf8', newline='')
     reader = csv.DictReader(infile)
     csv_urls = []
     for item in reader:
-        #print(item)
-        csv_urls.append(item['3'])
+        csv_urls.append(item['URL'])
     return csv_urls
 
-
-#take links
-#add to list
-
-
-#print(url_list)
-
 def sendSlackMsg():
-#get unique/new urlpyth
+#get unique/new url
 
     csv_urls = get_urls()
     for_message = [item for item in url_list if item not in csv_urls]
@@ -122,11 +87,11 @@ def sendSlackMsg():
         csv_titles = []
         csv_dates = []
         csv_desc = []
-    #plant
+
         for item in reader:
-            csv_titles.append(item['1'])
-            csv_dates.append(item['0'])
-            csv_desc.append(item['2'])
+            csv_titles.append(item['Title'])
+            csv_dates.append(item['Date'])
+            csv_desc.append(item['Teaser'])
 
     #prep slack token
 
@@ -136,7 +101,7 @@ def sendSlackMsg():
         try:
           response = client.chat_postMessage(
             channel="slack-bots",
-            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New UMD email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\nRead the teaser in :thread: or see <{for_message[0]}|the full email here>"}}]
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New UMD email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\nRead the teaser in :thread: or see <{for_message[0]}|the full email here.>\nSee recent <https://github.com/rinatorch/umd-email-bot/blob/main/Code/data.csv|emails here.>"}}]
           )
           ts_id = ts_id+response['ts']
         except SlackApiError as e:
@@ -147,7 +112,7 @@ def sendSlackMsg():
             response = client.chat_postMessage(
             channel="slack-bots",
             thread_ts=ts_id,
-            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f"*Start reading*\n{desc_list[0]}"}}]
+            blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f"*Start reading*\n{desc_list[0]}\n<{for_message[0]}|*Read the full email here.*>\n<https://president.umd.edu/taxonomy/term/campus-messages|Explore all emails here.>"}}]
               )
         except SlackApiError as e:
           # You will get a SlackApiError if "ok" is False
@@ -155,5 +120,3 @@ def sendSlackMsg():
 
 
 sendSlackMsg()
-
-#df.to_csv('data.csv')
