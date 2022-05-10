@@ -1,13 +1,11 @@
 # Meet the UMD email bot, designed for The Diamondback :robot:
 
 ## About the bot
-For my final project in JOUR328O, I set out to build a reporting tool that could instantly notify The Diamondback newsroom’s Slack when a new campus message – or email from the president’s office – was dispatched.
+For my final project in JOUR328O, I built a reporting tool that instantly notifies The Diamondback newsroom’s Slack when a new campus message – or email from the president’s office – was dispatched. The automated tool scrapes data from the president’s office [website](https://president.umd.edu/taxonomy/term/campus-messages).
 
-The app can help the newsroom break news quickly, but its need comes in large part from the university’s switch to only sending these messages to university email addresses.
+The app can help the newsroom break news quickly, but its need comes in large part from the university’s switch to only sending these messages to university email addresses. Many students – and Diamondback reporters – aren’t checking those emails nearly as frequently as they might check other emails. Plus, the emails don’t come at the same time for each email address. Thus, it was necessary to find a way to pull each email by bypassing the inconsistent email system that often goes unchecked.
 
-Many students – and Diamondback reporters – aren’t checking those emails nearly as frequently as they might check other emails. Plus, the emails don’t come at the same time for each email address. Thus, it was necessary to find a way to pull each email by bypassing the inconsistent email system that often goes unchecked.
-
-Scraping the campus messages from the university website allows The Diamondback to see each message as soon as it starts to exist on the page of the university’s website. When the Slack bot identifies a new message, it scrapes the data from the website, pulling the email title, link, date and description. The bot then delivers an alert to Slack with a link to the full email, the title and date of the email. In a thread, the bot replies to the alert message with the beginning of the email so reporters and editors alike can get a sense of the email just from Slack itself.
+Scraping the campus messages from the university website allows The Diamondback to see each message as soon as it starts to exist on the page of the university’s website. When the Slack bot identifies a new message, it scrapes the data from the website, pulling the email title, link, date and description. The bot then delivers an alert to Slack with a link to the full email, the title and date of the email. In a thread, the bot replies to the alert message with the beginning of the email so reporters and editors alike can get a sense of the email just from Slack itself. 
 
 The bot also links to a csv in GitHub that holds the recent data and source of the data, so users can explore these elements quickly and instantly. These links, especially the csv of breaking news could be useful at a time when we’re seeing a series of breaking news announcements. For example, this would have been useful amid rapid changes in COVID-19 restrictions.
 
