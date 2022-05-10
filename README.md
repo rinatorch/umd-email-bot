@@ -1,6 +1,6 @@
-#Introducing the UMD email bot, designed for The Diamondback :robot:
+# Introducing the UMD email bot, designed for The Diamondback :robot:
 
-##The email bot is an automated reporting tool that scrapes the latest emails and alerts the newsroom when a new email is published. ::zap:
+## The email bot is an automated reporting tool that scrapes the latest emails and alerts the newsroom when a new email is published. :zap:
 
 For my final project in JOUR328O, I set out to build a reporting tool that could instantly notify The Diamondback newsroom’s Slack when a new campus message – or email from the president’s office – was dispatched.
 
