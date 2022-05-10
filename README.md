@@ -1,8 +1,11 @@
-# Meet the UMD email bot, designed for The Diamondback :robot: :zap
+# Meet the UMD email bot, designed for The Diamondback :robot:
 
+## About the bot
 For my final project in JOUR328O, I set out to build a reporting tool that could instantly notify The Diamondback newsroom’s Slack when a new campus message – or email from the president’s office – was dispatched.
 
-Of course, the app can help the newsroom break news quickly, but its need comes in large part from the university’s switch to only sending these messages to university email addresses. Many students – and Diamondback reporters – aren’t checking those emails nearly as frequently as they might check other emails. Plus, the emails don’t come at the same time for each email address. Thus, it was necessary to find a way to pull each email by bypassing the inconsistent email system that often goes unchecked.
+The app can help the newsroom break news quickly, but its need comes in large part from the university’s switch to only sending these messages to university email addresses.
+
+Many students – and Diamondback reporters – aren’t checking those emails nearly as frequently as they might check other emails. Plus, the emails don’t come at the same time for each email address. Thus, it was necessary to find a way to pull each email by bypassing the inconsistent email system that often goes unchecked.
 
 Scraping the campus messages from the university website allows The Diamondback to see each message as soon as it starts to exist on the page of the university’s website. When the Slack bot identifies a new message, it scrapes the data from the website, pulling the email title, link, date and description. The bot then delivers an alert to Slack with a link to the full email, the title and date of the email. In a thread, the bot replies to the alert message with the beginning of the email so reporters and editors alike can get a sense of the email just from Slack itself.
 
@@ -12,7 +15,7 @@ The link to the full email appears multiple times to accommodate different types
 
 From a visual perspective, the bot includes an envelope icon and The Diamondback logo sitting inside of the envelope. The app icon – covered in “Diamondback red”, black and white – mimics the appearance of another Slack bot, aptly named “Diamondbot,” who lives in The Diamondback Slack. The two are intentionally similar, but not too similar so that the user can distinguish messages from Diamondbot and this UMD email bot.
 
-## The journey
+## The journey (and all of the road blocks)
 
 Over the course of creating this project, I ran into an expanse of problems. First, I had trouble figuring out the relationship between the yml file and Python. At a point, I remember seeing more than 90 GitHub Actions failed messages fill my inbox. I tried to do too much with the yml file, but I later moved the actions I tried to do in the yml file into Python. Specifically, in Python, I added code that would only send Slack messages if there was new data, rather than turning to the yml file to try to do this.
 
