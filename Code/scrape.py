@@ -100,7 +100,7 @@ def sendSlackMsg():
         ts_id = ""
         try:
           response = client.chat_postMessage(
-            channel="presidential-alerts",
+            channel="news_desk",
             blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f":rotating_light: New UMD email on {csv_dates[0]}:rotating_light:\n*{csv_titles[0]}*\nRead the teaser in :thread: or see <{for_message[0]}|the full email here.>\nSee recent <https://github.com/rinatorch/umd-email-bot/blob/main/Code/data.csv|emails here.>"}}]
           )
           ts_id = ts_id+response['ts']
@@ -110,7 +110,7 @@ def sendSlackMsg():
     for item in for_message:
         try:
             response = client.chat_postMessage(
-            channel="presidential-alerts",
+            channel="news_desk",
             thread_ts=ts_id,
             blocks = [{"type": "section", "text": {"type": "mrkdwn", "text": f"*Start reading*\n{desc_list[0]}\n<{for_message[0]}|*Read the full email here.*>\n<https://president.umd.edu/taxonomy/term/campus-messages|Explore all emails here.>"}}]
               )
